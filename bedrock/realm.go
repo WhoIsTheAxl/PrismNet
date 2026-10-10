@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/df-mc/go-playfab/v2"
 	"github.com/df-mc/go-xsapi/v2"
