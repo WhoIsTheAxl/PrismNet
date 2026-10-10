@@ -1,0 +1,7 @@
+# OAuth credentials and generated binaries
+token.json
+**/token.json
+*.exe
+*.test
+*.out
+bin/
