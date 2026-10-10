@@ -61,10 +61,10 @@ func (s *Session) handlePacket(p packet.Packet) {
  for _,h:=range handlers {h(p)}
 }
 func (s *Session) handlePlayerJoin(p *Player) {
- s.mu.Lock();s.players[p.UUID.String()]=p;handlers:=append([]func(*Player)(nil),s.playerHandlers...);s.mu.Unlock()
+ s.mu.Lock();s.players[p.UUID.String()]=p;handlers:=append([]func(*Player){}, s.playerHandlers...);s.mu.Unlock()
  for _,h:=range handlers {h(p)}
 }
 func (s *Session) handleDisconnect(err error) {
- s.mu.RLock();handlers:=append([]func(error)(nil),s.disconnectHandlers...);s.mu.RUnlock()
+ s.mu.RLock();handlers:=append([]func(error){}, s.disconnectHandlers...);s.mu.RUnlock()
  for _,h:=range handlers {h(err)}
 }
