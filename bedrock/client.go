@@ -1,25 +1,24 @@
 package bedrock
 
 import (
-	"github.com/sandertv/gophertunnel/minecraft"
-	"github.com/WhoIsTheAxl/Prismnet/bedrock"
+ "sync"
+ "github.com/sandertv/gophertunnel/minecraft"
 )
-
 type Client struct {
-	conn *minecraft.Conn
+ conn *minecraft.Conn
+ once sync.Once
+ session *Session
 }
-
-
-func newClient(Conn *minecraft.Conn) *Client {
-	return Client{
-		conn: Conn
-	}
+func newClient(conn *minecraft.Conn) *Client {
+ c := &Client{conn:conn}
+ c.session = newSession(conn)
+ return c
 }
-
 func (c *Client) Close() error {
-    return c.conn.Close()
+ if c == nil { return nil }
+ var err error
+ c.once.Do(func(){ c.session.stop(); err = c.conn.Close() })
+ return err
 }
-
-func (c *Client) Session() *Session {
-	return Session{}
-}
+func (c *Client) Session() *Session { if c == nil { return nil }; return c.session }
+func (c *Client) Conn() *minecraft.Conn { if c == nil { return nil }; return c.conn }
